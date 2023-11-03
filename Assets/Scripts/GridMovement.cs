@@ -196,4 +196,28 @@ public class NewBehaviourScript : MonoBehaviour
         maxMovement = maxMovementOrig;
         Debug.Log("max Movement: " + maxMovement);
     }
+
+
+    private void spawnEnemy()
+    {
+
+
+    }
+    public class SpawnEnemy : MonoBehaviour
+    {
+        public GameObject enemy; // Assign your enemy game object here
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.E)) // When the E key is pressed
+            {
+                enemy.SetActive(true); // Activate the enemy
+            }
+        }
+    }
+
+
 }
+
+
+
