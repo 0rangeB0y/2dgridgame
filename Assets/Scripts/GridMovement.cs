@@ -12,6 +12,9 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private float gridSize; //1f
     [SerializeField] private int maxMovementOrig;
 
+    //public Enemy enemySpawner; // Drag the GameObject with the SpawnEnemy script here
+
+
     private bool isMoving = false;
     //private bool canMove = true;
 
@@ -37,6 +40,11 @@ public class NewBehaviourScript : MonoBehaviour
         {
             nextTurn();
         }
+
+        /*if (Input.GetKeyDown(KeyCode.E))
+        {
+            enemySpawner.SpawnEnemy();
+        }*/
 
 
         if (Input.GetMouseButtonDown(0))
@@ -185,6 +193,8 @@ public class NewBehaviourScript : MonoBehaviour
     }
 
 
+
+
     private void nextTurn()
     {
         //Enemy code
@@ -197,24 +207,7 @@ public class NewBehaviourScript : MonoBehaviour
         Debug.Log("max Movement: " + maxMovement);
     }
 
-
-    private void spawnEnemy()
-    {
-
-
-    }
-    public class SpawnEnemy : MonoBehaviour
-    {
-        public GameObject enemy; // Assign your enemy game object here
-
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.E)) // When the E key is pressed
-            {
-                enemy.SetActive(true); // Activate the enemy
-            }
-        }
-    }
+    
 
 
 }

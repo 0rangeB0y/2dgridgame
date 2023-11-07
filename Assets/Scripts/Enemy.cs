@@ -5,7 +5,8 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
 
-    public GameObject enemyPrefab; // Assign your enemy prefab here
+
+    [SerializeField] public GameObject enemyPrefab; // Assign your enemy prefab here
     private GameObject enemyInstance;
     // Start is called before the first frame update
     void Start()
@@ -16,14 +17,20 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SpawnEnemy();
+        }
     }
 
     public void SpawnEnemy()
     {
         if (enemyInstance == null)
         {
-            enemyInstance = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+            Vector3 spawnPosition = new Vector3(0, 3, 0);
+
+
+            enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
         }
     }
 }
