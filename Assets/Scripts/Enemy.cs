@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public class Enemy : MonoBehaviour
 {
@@ -17,14 +19,17 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        
+        
+        /*if (Input.GetKeyDown(KeyCode.E))
         {
             SpawnEnemy();
-        }
+        }*/
     }
 
     public void SpawnEnemy()
     {
+        
         if (enemyInstance == null)
         {
             Vector3 spawnPosition = new Vector3(0, 3, 0);

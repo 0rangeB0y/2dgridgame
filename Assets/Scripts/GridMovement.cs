@@ -13,7 +13,7 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private int maxMovementOrig;
 
     //public Enemy enemySpawner; // Drag the GameObject with the SpawnEnemy script here
-
+    [SerializeField] private Enemy enemyScript;
 
     private bool isMoving = false;
     //private bool canMove = true;
@@ -41,10 +41,12 @@ public class NewBehaviourScript : MonoBehaviour
             nextTurn();
         }
 
-        /*if (Input.GetKeyDown(KeyCode.E))
+       
+
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            enemySpawner.SpawnEnemy();
-        }*/
+            SpawnEnemyFromGrid();
+        }
 
 
         if (Input.GetMouseButtonDown(0))
@@ -118,6 +120,18 @@ public class NewBehaviourScript : MonoBehaviour
             {
                 StartCoroutine(Move(Vector2.right));
             }
+        }
+    }
+
+    public void SpawnEnemyFromGrid()
+    {
+        if (enemyScript != null)
+        {
+            enemyScript.SpawnEnemy();
+        }
+        else
+        {
+            Debug.LogError("Enemy script not assigned.");
         }
     }
 
