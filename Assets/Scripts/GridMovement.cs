@@ -23,8 +23,11 @@ public class NewBehaviourScript : MonoBehaviour
     int playerClickDistance;
     int xDistance;
     int yDistance;
-    int maxMovement;
-    //int currDistance;
+    public int maxMovement;
+
+    //int maxHealth = 10;
+    public int currHealth = 10;
+    public int turnNum = 1;
 
     private void Start()
     {
@@ -211,6 +214,7 @@ public class NewBehaviourScript : MonoBehaviour
 
     private void nextTurn()
     {
+        turnNum++;
         //Enemy code
 
 
