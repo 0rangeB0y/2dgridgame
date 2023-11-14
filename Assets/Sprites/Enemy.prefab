@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -7604320282638575790}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -102,6 +102,10 @@ MonoBehaviour:
   moveDuration: 0.1
   gridSize: 1
   maxMovementOrig: 5
+  enemyScript: {fileID: 0}
+  maxMovement: 0
+  currHealth: 10
+  turnNum: 1
 --- !u!114 &-7604320282638575790
 MonoBehaviour:
   m_ObjectHideFlags: 0

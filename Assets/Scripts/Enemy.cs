@@ -25,15 +25,12 @@ public class Enemy : MonoBehaviour
         
     }
 
-    //List for current spawn Positions of enemies
-    List<Vector3> spawnedPositions = new List<Vector3>();
-
     public void SpawnEnemy()
     {
         Vector3 spawnPosition;
         bool positionOccupied;
 
-        if (spawnedPositions.Count < 38)
+        if (GameObject.FindGameObjectsWithTag("Enemy").Length < 38)
         {
             do
             {
@@ -42,10 +39,11 @@ public class Enemy : MonoBehaviour
                 float randomY = Mathf.Round(UnityEngine.Random.Range(3.0f, 4.0f));
                 spawnPosition = new Vector3(randomX, randomY, 0);
 
-                // Check if any enemy has already spawned at this position
-                foreach (Vector3 pos in spawnedPositions)
+                // Check current positions of all enemies
+                GameObject[] existingEnemies = GameObject.FindGameObjectsWithTag("Enemy");
+                foreach (GameObject enemy in existingEnemies)
                 {
-                    if (Vector3.Distance(pos, spawnPosition) < 1) // Check to see if enemy spawns on occupied tile
+                    if (Vector3.Distance(enemy.transform.position, spawnPosition) < 1)
                     {
                         positionOccupied = true;
                         break;
@@ -54,9 +52,7 @@ public class Enemy : MonoBehaviour
             }
             while (positionOccupied);
 
-
             GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-            spawnedPositions.Add(spawnPosition); // Add the spawn position to the list
         }
         else
         {
