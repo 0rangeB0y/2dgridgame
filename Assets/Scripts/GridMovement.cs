@@ -21,6 +21,7 @@ public class NewBehaviourScript : MonoBehaviour
     int xClick;
     int yClick;
     int playerClickDistance;
+    int enemyClickDistance;
     int xDistance;
     int yDistance;
     public int maxMovement;
@@ -60,12 +61,14 @@ public class NewBehaviourScript : MonoBehaviour
             //Debug.Log("True X: " + mousePos.x);
             //Debug.Log("True Y: " + mousePos.y);
 
+
             xClick = (int)(math.round(mousePos.x / 72.5) - 10);
             yClick = (int)(math.round(mousePos.y / 72.5) - 5);
 
             Debug.Log("Click X: " + xClick);
             Debug.Log("Click Y: " + yClick);
 
+            
             //Get Character coordinates
             Vector3 position = gameObject.transform.position;
             float xCharacter = position.x;
@@ -74,21 +77,56 @@ public class NewBehaviourScript : MonoBehaviour
             Debug.Log("Player X: " + xCharacter);
             Debug.Log("Player Y: " + yCharacter);
 
-            //Get Distance from click coordinates to player coordinates
-            xDistance = xClick - (int)xCharacter;
-            yDistance = yClick - (int)yCharacter;
-            playerClickDistance = math.abs(xDistance) + math.abs(yDistance);
-            Debug.Log("distance: " + playerClickDistance);
-            
-
-            if (playerClickDistance <= maxMovement)
+            //check if click on enemy
+            bool clickEnemy = false;
+            int xEnemy = -99;
+            int yEnemy = -99;
+            GameObject[] existingEnemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject enemy in existingEnemies)
             {
-                Debug.Log("Start movement");
-                StartCoroutine(HandleMovement());
-                maxMovement -= playerClickDistance;
-               
+                if (enemy.transform.position.x == xClick && enemy.transform.position.y == yClick)
+                {
+                    clickEnemy = true;
+                    xEnemy = (int)enemy.transform.position.x;
+                    yEnemy = (int)enemy.transform.position.y;
+
+                    break; //break if enemy clicked is found
+                }
             }
-            Debug.Log("max Movement: " + maxMovement);
+
+            if (clickEnemy)
+            {
+                Debug.Log("enemy clicked");
+
+                if(xEnemy == -99 || yEnemy == -99)
+                {
+                    Debug.Log("Invalid enemy coordinates");
+                }
+                //Get distance from player to enemy
+                xDistance = xEnemy - (int)xCharacter;
+                yDistance = yEnemy - (int)yCharacter;
+                enemyClickDistance = math.abs(xDistance) + math.abs(yDistance);
+                Debug.Log("Player Enemy distance: " + enemyClickDistance);
+
+            }
+            else
+            {
+                //Get Distance from click coordinates to player coordinates
+                xDistance = xClick - (int)xCharacter;
+                yDistance = yClick - (int)yCharacter;
+                playerClickDistance = math.abs(xDistance) + math.abs(yDistance);
+                Debug.Log("Player click distance: " + playerClickDistance);
+
+
+                if (playerClickDistance <= maxMovement)
+                {
+                    Debug.Log("Start movement");
+                    StartCoroutine(HandleMovement());
+                    maxMovement -= playerClickDistance;
+
+                }
+                Debug.Log("max Movement: " + maxMovement);
+            }
         }
         
 
