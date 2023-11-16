@@ -10,7 +10,12 @@ public class Enemy : MonoBehaviour
 
 
     [SerializeField] public GameObject enemyPrefab; // Assign your enemy prefab here
+
+    //public int health;
     private GameObject enemyInstance;
+
+    //[SerializeField] private int enemyHealth = 5;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,11 +58,22 @@ public class Enemy : MonoBehaviour
             while (positionOccupied);
 
             GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            //enemyInstance.GetComponent<Enemy>().SetHealth(enemyHealth);
         }
         else
         {
             UnityEngine.Debug.Log("Enemy spawns are full");
         }
+    }
+
+    /*public void SetHealth(int health)
+    {
+        this.enemyHealth = health;
+    }*/
+
+    public void DamageEnemy(GameObject enemy, int damage)
+    {
+        enemy.GetComponent<IndividualEnemy>().TakeDamage(damage);
     }
 
 }

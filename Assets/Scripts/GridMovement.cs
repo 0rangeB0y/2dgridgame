@@ -27,6 +27,7 @@ public class NewBehaviourScript : MonoBehaviour
     int xDistance;
     int yDistance;
     public int maxMovement;
+    GameObject clickedEnemy;
 
     //int maxHealth = 10;
     public int currHealth = 10;
@@ -91,6 +92,7 @@ public class NewBehaviourScript : MonoBehaviour
                     clickEnemy = true;
                     xEnemy = (int)enemy.transform.position.x;
                     yEnemy = (int)enemy.transform.position.y;
+                    clickedEnemy = enemy;
 
                     break; //break if enemy clicked is found
                 }
@@ -115,6 +117,7 @@ public class NewBehaviourScript : MonoBehaviour
                 {
                     Vector2 direction = new Vector2(xDistance, yDistance);
                     PlayerRangedAttack(direction);
+                    DamageEnemy(1);
                 }
 
 
@@ -186,6 +189,19 @@ public class NewBehaviourScript : MonoBehaviour
         {
             Debug.LogError("Enemy script not assigned.");
         }
+    }
+
+    public void DamageEnemy(int damage)
+    {
+        if (enemyScript != null)
+        {
+            enemyScript.DamageEnemy(clickedEnemy, damage);
+        }
+        else
+        {
+            Debug.LogError("Enemy script not assigned.");
+        }
+
     }
 
     public void PlayerRangedAttack(Vector2 direction)
