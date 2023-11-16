@@ -11,6 +11,7 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private float moveDuration; //0.1f
     [SerializeField] private float gridSize; //1f
     [SerializeField] private int maxMovementOrig;
+    [SerializeField] private Player player;
 
     //public Enemy enemySpawner; // Drag the GameObject with the SpawnEnemy script here
     [SerializeField] private Enemy enemyScript;
@@ -106,6 +107,16 @@ public class NewBehaviourScript : MonoBehaviour
                 xDistance = xEnemy - (int)xCharacter;
                 yDistance = yEnemy - (int)yCharacter;
                 enemyClickDistance = math.abs(xDistance) + math.abs(yDistance);
+
+
+                // If within enemy range, the player will perform a ranged attack.
+                if(enemyClickDistance <= 3)
+                {
+                    Vector2 direction = new Vector2(xDistance, yDistance);
+                    player.RangedAttack(direction);
+                }
+
+
                 Debug.Log("Player Enemy distance: " + enemyClickDistance);
 
             }
