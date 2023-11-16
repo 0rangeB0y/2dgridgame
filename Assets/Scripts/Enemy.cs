@@ -30,12 +30,12 @@ public class Enemy : MonoBehaviour
         Vector3 spawnPosition;
         bool positionOccupied;
 
-        if (GameObject.FindGameObjectsWithTag("Enemy").Length < 38)
+        if (GameObject.FindGameObjectsWithTag("Enemy").Length < 34)
         {
             do
             {
                 positionOccupied = false;
-                float randomX = Mathf.Round(UnityEngine.Random.Range(-9.0f, 9.0f));
+                float randomX = Mathf.Round(UnityEngine.Random.Range(-8.0f, 8.0f));
                 float randomY = Mathf.Round(UnityEngine.Random.Range(3.0f, 4.0f));
                 spawnPosition = new Vector3(randomX, randomY, 0);
 

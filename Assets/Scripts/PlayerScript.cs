@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class PlayerScript : MonoBehaviour
 {
     [SerializeField] private GameObject rangedProjectile;
     [SerializeField] private float projectileSpeed = 1f;
@@ -20,11 +20,14 @@ public class Player : MonoBehaviour
         
     }
 
-    public void RangedAttack(Vector2 direction)
+    public void RangedAttack(Vector2 direction, Transform playerPosition, int distance)
     {
-        GameObject projectile = Instantiate(rangedProjectile, transform.position, Quaternion.identity);
+        //Debug.Log("player script runs");
+        GameObject projectile = Instantiate(rangedProjectile, playerPosition.position, Quaternion.identity);
         Rigidbody2D rb2D = projectile.GetComponent<Rigidbody2D>();
         rb2D.velocity = direction * projectileSpeed; 
+
+        
     }
 
     /*

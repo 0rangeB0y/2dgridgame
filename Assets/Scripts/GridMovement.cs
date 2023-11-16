@@ -11,10 +11,11 @@ public class NewBehaviourScript : MonoBehaviour
     [SerializeField] private float moveDuration; //0.1f
     [SerializeField] private float gridSize; //1f
     [SerializeField] private int maxMovementOrig;
-    [SerializeField] private Player player;
+    
 
-    //public Enemy enemySpawner; // Drag the GameObject with the SpawnEnemy script here
+    
     [SerializeField] private Enemy enemyScript;
+    [SerializeField] private PlayerScript playerScript;
 
     private bool isMoving = false;
     //private bool canMove = true;
@@ -59,12 +60,12 @@ public class NewBehaviourScript : MonoBehaviour
             //Get Mouse coordinates
             Vector3 mousePos = Input.mousePosition;
 
-            //Debug.Log("True X: " + mousePos.x);
-            //Debug.Log("True Y: " + mousePos.y);
+            Debug.Log("True X: " + mousePos.x);
+            Debug.Log("True Y: " + mousePos.y);
 
 
-            xClick = (int)(math.round(mousePos.x / 72.5) - 10);
-            yClick = (int)(math.round(mousePos.y / 72.5) - 5);
+            xClick = (int)(math.round(mousePos.x / 108) - 9);
+            yClick = (int)(math.round(mousePos.y / 108) - 5);
 
             Debug.Log("Click X: " + xClick);
             Debug.Log("Click Y: " + yClick);
@@ -113,7 +114,7 @@ public class NewBehaviourScript : MonoBehaviour
                 if(enemyClickDistance <= 3)
                 {
                     Vector2 direction = new Vector2(xDistance, yDistance);
-                    player.RangedAttack(direction);
+                    PlayerRangedAttack(direction);
                 }
 
 
@@ -185,6 +186,19 @@ public class NewBehaviourScript : MonoBehaviour
         {
             Debug.LogError("Enemy script not assigned.");
         }
+    }
+
+    public void PlayerRangedAttack(Vector2 direction)
+    {
+        if (playerScript != null)
+        {
+        playerScript.RangedAttack(direction, transform, enemyClickDistance);
+        }
+        else
+        {
+            Debug.LogError("Player script not assigned.");
+        }
+
     }
 
     private IEnumerator HandleMovement()
