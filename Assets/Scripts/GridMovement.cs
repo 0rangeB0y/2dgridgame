@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
-public class NewBehaviourScript : MonoBehaviour
+public class GridMovement : MonoBehaviour
 {
     //Hold down key for movement
     [SerializeField] private bool isRepeatedMovement = false;

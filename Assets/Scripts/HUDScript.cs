@@ -7,13 +7,13 @@ public class HUDScript : MonoBehaviour
 {
 
     public TextMeshProUGUI hudText;
-    private NewBehaviourScript gameData; // Reference to your game data
+    private GridMovement gameData; // Reference to your game data
 
 
     // Start is called before the first frame update
     void Start()
     {
-        gameData = FindObjectOfType<NewBehaviourScript>(); // Or any other way to get your game data
+        gameData = FindObjectOfType<GridMovement>(); // Or any other way to get your game data
     }
 
     // Update is called once per frame

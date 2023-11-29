@@ -25,8 +25,17 @@ public class PlayerScript : MonoBehaviour
         //Debug.Log("player script runs");
         GameObject projectile = Instantiate(rangedProjectile, playerPosition.position, Quaternion.identity);
         Rigidbody2D rb2D = projectile.GetComponent<Rigidbody2D>();
+
+
+        // Calculating angle for projectile to point towards enemy
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        projectile.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+
+
         rb2D.velocity = direction * projectileSpeed; 
 
+        
         
     }
 
