@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Transactions;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -144,7 +145,26 @@ public class GridMovement : MonoBehaviour
             }
         }
         
+        // Right click on the enemy to perform a melee attack.
 
+        if (Input.GetMouseButtonDown(1))
+        {
+            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+            {
+                if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
+                {
+                    GameObject enemy = hit.collider.gameObject;
+
+                    if (IsEnemyAdjacent(enemy))
+                    {
+                        playerScript.MeleeAttack(enemy);
+                    }
+
+                }
+            }
+        }
+
+        
 
         if (!isMoving)
         {
@@ -302,6 +322,14 @@ public class GridMovement : MonoBehaviour
         //Reset Player
         maxMovement = maxMovementOrig;
         Debug.Log("max Movement: " + maxMovement);
+    }
+
+
+    // Enemy must be next to the player in order for the attack to go through.
+    private bool IsEnemyAdjacent(GameObject enemy)
+    {
+        float distance = Vector3.Distance(transform.position, enemy.transform.position);
+        return distance <= 1.0;
     }
 
     

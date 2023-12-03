@@ -6,6 +6,7 @@ public class PlayerScript : MonoBehaviour
 {
     [SerializeField] private GameObject rangedProjectile;
     [SerializeField] private float projectileSpeed = 1f;
+    [SerializeField] private int meleeDamage = 2;
 
 
     // Start is called before the first frame update
@@ -39,12 +40,14 @@ public class PlayerScript : MonoBehaviour
         
     }
 
-
-
-    /*
-    public void MeleeAttack()
+    // Performs the melee attack.
+    public void MeleeAttack(GameObject enemy)
     {
+        if (enemy != null)
+        {
+            enemy.GetComponent<IndividualEnemy>().TakeDamage(meleeDamage);
+        }
         
+
     }
-    */
 }
