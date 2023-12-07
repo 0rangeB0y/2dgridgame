@@ -62,15 +62,15 @@ public class GridMovement : MonoBehaviour
             //Get Mouse coordinates
             Vector3 mousePos = Input.mousePosition;
 
-            Debug.Log("True X: " + mousePos.x);
-            Debug.Log("True Y: " + mousePos.y);
+            //Debug.Log("True X: " + mousePos.x);
+            //Debug.Log("True Y: " + mousePos.y);
 
 
             xClick = (int)(math.round(mousePos.x / 108) - 9);
             yClick = (int)(math.round(mousePos.y / 108) - 5);
 
-            Debug.Log("Click X: " + xClick);
-            Debug.Log("Click Y: " + yClick);
+            //Debug.Log("Click X: " + xClick);
+            //Debug.Log("Click Y: " + yClick);
 
             
             //Get Character coordinates
@@ -78,8 +78,8 @@ public class GridMovement : MonoBehaviour
             float xCharacter = position.x;
             float yCharacter = position.y;
 
-            Debug.Log("Player X: " + xCharacter);
-            Debug.Log("Player Y: " + yCharacter);
+            //Debug.Log("Player X: " + xCharacter);
+            //Debug.Log("Player Y: " + yCharacter);
 
             //check if click on enemy
             bool clickEnemy = false;
@@ -113,14 +113,23 @@ public class GridMovement : MonoBehaviour
                 enemyClickDistance = math.abs(xDistance) + math.abs(yDistance);
 
 
-                // If within enemy range, the player will perform a ranged attack.
-                if(enemyClickDistance <= 3)
+                // Check range for attacks
+                // Check for melee attack first
+                if (enemyClickDistance <= 1)
                 {
+                    Debug.Log("melee attack");
+                    DamageEnemy(2);
+
+                } //Checks ranged attack if not in range for melee
+                else if(enemyClickDistance <= 3)
+                {
+                    Debug.Log("ranged attack");
                     Vector2 direction = new Vector2(xDistance, yDistance);
                     PlayerRangedAttack(direction);
                     DamageEnemy(1);
                 }
 
+                
 
                 Debug.Log("Player Enemy distance: " + enemyClickDistance);
 
@@ -136,7 +145,7 @@ public class GridMovement : MonoBehaviour
 
                 if (playerClickDistance <= maxMovement)
                 {
-                    Debug.Log("Start movement");
+                    //Debug.Log("Start movement");
                     StartCoroutine(HandleMovement());
                     maxMovement -= playerClickDistance;
 
@@ -319,7 +328,7 @@ public class GridMovement : MonoBehaviour
 
 
 
-        //Reset Player
+        //Reset Player movement
         maxMovement = maxMovementOrig;
         Debug.Log("max Movement: " + maxMovement);
     }

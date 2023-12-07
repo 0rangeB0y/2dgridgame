@@ -14,7 +14,7 @@ public class IndividualEnemy : MonoBehaviour
         Debug.Log("Enemy health: " + health);
         if (health <= 0)
         {
-            Destroy(gameObject); // This should destroy the Enemy(Clone) GameObject
+            Destroy(gameObject); // destroys the Enemy(Clone) GameObject
         }
     }
 
