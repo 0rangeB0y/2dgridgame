@@ -499,7 +499,9 @@ MonoBehaviour:
 
     Movement
 
-    Turn'
+    Turn
+
+    Round'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -626,6 +628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rangedProjectile: {fileID: 871252531238235536, guid: b143c6ff7900f5b47882690567ffc218, type: 3}
   projectileSpeed: 1
+  meleeDamage: 2
 --- !u!4 &1511198811
 Transform:
   m_ObjectHideFlags: 0
@@ -740,7 +743,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a81f78ba377c24a834c1649c2846b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isRepeatedMovement: 0
   moveDuration: 0.1
   gridSize: 1
   maxMovementOrig: 5
@@ -749,6 +751,7 @@ MonoBehaviour:
   maxMovement: 0
   currHealth: 10
   turnNum: 1
+  roundNum: 1
 --- !u!114 &1523631196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -776,6 +779,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rangedProjectile: {fileID: 0}
   projectileSpeed: 1
+  meleeDamage: 2
 --- !u!1 &1659575011
 GameObject:
   m_ObjectHideFlags: 0

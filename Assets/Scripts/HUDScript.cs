@@ -19,7 +19,7 @@ public class HUDScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        hudText.text = "Health: " + gameData.currHealth + "\nMovement available: " + gameData.maxMovement + "\nTurn : " + gameData.turnNum; 
+        hudText.text = "Health: " + gameData.currHealth + "\nMovement available: " + gameData.maxMovement + "\nTurn : " + gameData.turnNum + "\nRound : " + gameData.roundNum; 
     }
 }
 

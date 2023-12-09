@@ -8,7 +8,7 @@ using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCou
 public class GridMovement : MonoBehaviour
 {
     //Hold down key for movement
-    [SerializeField] private bool isRepeatedMovement = false;
+    //[SerializeField] private bool isRepeatedMovement = false;
     [SerializeField] private float moveDuration; //0.1f
     [SerializeField] private float gridSize; //1f
     [SerializeField] private int maxMovementOrig;
@@ -29,14 +29,17 @@ public class GridMovement : MonoBehaviour
     int yDistance;
     public int maxMovement;
     GameObject clickedEnemy;
+    int enemiesToSpawn = 1;
 
     //int maxHealth = 10;
     public int currHealth = 10;
     public int turnNum = 1;
+    public int roundNum = 1;
 
     private void Start()
     {
         maxMovement = maxMovementOrig;
+        SpawnEnemyFromGrid();
     }
 
 
@@ -49,12 +52,34 @@ public class GridMovement : MonoBehaviour
             nextTurn();
         }
 
-       
 
-        if (Input.GetKeyDown(KeyCode.E))
+
+        /*if (Input.GetKeyDown(KeyCode.E))
         {
             SpawnEnemyFromGrid();
+        }*/
+
+        //Check to see if all enemies are killed
+        if (GameObject.FindGameObjectsWithTag("Enemy").Length < 1)
+        {
+            Debug.Log("Round complete");
+
+            //Reset player back to start
+            transform.position = new Vector3(0, -4, 0);
+            roundNum++;
+            turnNum = 0;
+            enemiesToSpawn++;
+            maxMovement = maxMovementOrig;
+            if (roundNum < 30)
+            {
+                for (int i = 0; i < enemiesToSpawn; i++)
+                {
+                    SpawnEnemyFromGrid();
+                }
+            }
+
         }
+
 
 
         if (Input.GetMouseButtonDown(0))
@@ -119,6 +144,7 @@ public class GridMovement : MonoBehaviour
                 {
                     Debug.Log("melee attack");
                     DamageEnemy(2);
+                    nextTurn();
 
                 } //Checks ranged attack if not in range for melee
                 else if(enemyClickDistance <= 3)
@@ -127,6 +153,7 @@ public class GridMovement : MonoBehaviour
                     Vector2 direction = new Vector2(xDistance, yDistance);
                     PlayerRangedAttack(direction);
                     DamageEnemy(1);
+                    nextTurn();
                 }
 
                 
@@ -156,7 +183,7 @@ public class GridMovement : MonoBehaviour
         
         // Right click on the enemy to perform a melee attack.
 
-        if (Input.GetMouseButtonDown(1))
+        /*if (Input.GetMouseButtonDown(1))
         {
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             {
@@ -171,10 +198,10 @@ public class GridMovement : MonoBehaviour
 
                 }
             }
-        }
+        }*/
 
         
-
+        /*
         if (!isMoving)
         {
             //Makes it so you cant spam movement with arrow keys
@@ -206,6 +233,7 @@ public class GridMovement : MonoBehaviour
                 StartCoroutine(Move(Vector2.right));
             }
         }
+        */
     }
 
     public void SpawnEnemyFromGrid()
@@ -244,6 +272,19 @@ public class GridMovement : MonoBehaviour
             Debug.LogError("Player script not assigned.");
         }
 
+    }
+
+    private void nextTurn()
+    {
+        turnNum++;
+        //Enemy code
+
+
+
+
+        //Reset Player movement
+        maxMovement = maxMovementOrig;
+        //Debug.Log("max Movement: " + maxMovement);
     }
 
     private IEnumerator HandleMovement()
@@ -317,21 +358,6 @@ public class GridMovement : MonoBehaviour
         isMoving = false;
     }
 
-
-
-
-    private void nextTurn()
-    {
-        turnNum++;
-        //Enemy code
-
-
-
-
-        //Reset Player movement
-        maxMovement = maxMovementOrig;
-        Debug.Log("max Movement: " + maxMovement);
-    }
 
 
     // Enemy must be next to the player in order for the attack to go through.
