@@ -128,7 +128,7 @@ public class GridMovement : MonoBehaviour
             {
                 Debug.Log("enemy clicked");
 
-                if(xEnemy == -99 || yEnemy == -99)
+                if (xEnemy == -99 || yEnemy == -99)
                 {
                     Debug.Log("Invalid enemy coordinates");
                 }
@@ -137,27 +137,28 @@ public class GridMovement : MonoBehaviour
                 yDistance = yEnemy - (int)yCharacter;
                 enemyClickDistance = math.abs(xDistance) + math.abs(yDistance);
 
+                //2 movement cost to attack
+                if (maxMovement >= 2)
+                { 
+                    // Check range for attacks
+                    // Check for melee attack first
+                    if (enemyClickDistance <= 1 && maxMovement >= 2)
+                    {
+                        Debug.Log("melee attack");
+                        DamageEnemy(2);
+                        maxMovement -= 2;
 
-                // Check range for attacks
-                // Check for melee attack first
-                if (enemyClickDistance <= 1)
-                {
-                    Debug.Log("melee attack");
-                    DamageEnemy(2);
-                    nextTurn();
-
-                } //Checks ranged attack if not in range for melee
-                else if(enemyClickDistance <= 3)
-                {
-                    Debug.Log("ranged attack");
-                    Vector2 direction = new Vector2(xDistance, yDistance);
-                    PlayerRangedAttack(direction);
-                    DamageEnemy(1);
-                    nextTurn();
+                    } //Checks ranged attack if not in range for melee
+                    else if (enemyClickDistance <= 3)
+                    {
+                        Debug.Log("ranged attack");
+                        Vector2 direction = new Vector2(xDistance, yDistance);
+                        PlayerRangedAttack(direction);
+                        DamageEnemy(1);
+                        maxMovement -= 2;
+                    }
                 }
-
                 
-
                 Debug.Log("Player Enemy distance: " + enemyClickDistance);
 
             }
