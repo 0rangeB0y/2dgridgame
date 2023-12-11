@@ -3,6 +3,7 @@ using System.Transactions;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 public class GridMovement : MonoBehaviour
@@ -35,6 +36,9 @@ public class GridMovement : MonoBehaviour
     public int currHealth = 10;
     public int turnNum = 1;
     public int roundNum = 1;
+
+    float xCharacter;
+    float yCharacter;
 
     private void Start()
     {
@@ -100,8 +104,8 @@ public class GridMovement : MonoBehaviour
             
             //Get Character coordinates
             Vector3 position = gameObject.transform.position;
-            float xCharacter = position.x;
-            float yCharacter = position.y;
+            xCharacter = position.x;
+            yCharacter = position.y;
 
             //Debug.Log("Player X: " + xCharacter);
             //Debug.Log("Player Y: " + yCharacter);
@@ -178,63 +182,10 @@ public class GridMovement : MonoBehaviour
                     maxMovement -= playerClickDistance;
 
                 }
-                Debug.Log("max Movement: " + maxMovement);
+                //Debug.Log("max Movement: " + maxMovement);
             }
         }
         
-        // Right click on the enemy to perform a melee attack.
-
-        /*if (Input.GetMouseButtonDown(1))
-        {
-            RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-            {
-                if (hit.collider != null && hit.collider.gameObject.CompareTag("Enemy"))
-                {
-                    GameObject enemy = hit.collider.gameObject;
-
-                    if (IsEnemyAdjacent(enemy))
-                    {
-                        playerScript.MeleeAttack(enemy);
-                    }
-
-                }
-            }
-        }*/
-
-        
-        /*
-        if (!isMoving)
-        {
-            //Makes it so you cant spam movement with arrow keys
-            System.Func<KeyCode, bool> inputFunction;
-            if (isRepeatedMovement)
-            {
-                inputFunction = Input.GetKey;
-            }
-            else
-            {
-                inputFunction = Input.GetKeyDown;
-            }
-
-            //if function active, move in direction
-            if (inputFunction(KeyCode.UpArrow))
-            {
-                StartCoroutine(Move(Vector2.up));
-            }
-            else if (inputFunction(KeyCode.DownArrow))
-            {
-                StartCoroutine(Move(Vector2.down));
-            }
-            else if (inputFunction(KeyCode.LeftArrow))
-            {
-                StartCoroutine(Move(Vector2.left));
-            }
-            else if (inputFunction(KeyCode.RightArrow))
-            {
-                StartCoroutine(Move(Vector2.right));
-            }
-        }
-        */
     }
 
     public void SpawnEnemyFromGrid()
@@ -262,6 +213,17 @@ public class GridMovement : MonoBehaviour
 
     }
 
+    public void DamagePlayer(int damage)
+    {
+        currHealth-= damage;
+
+        if (currHealth <= 0)
+        {
+            Debug.Log("You lose");
+        }
+
+    }
+
     public void PlayerRangedAttack(Vector2 direction)
     {
         if (playerScript != null)
@@ -277,9 +239,62 @@ public class GridMovement : MonoBehaviour
 
     private void nextTurn()
     {
+        //Advance turn counter
         turnNum++;
-        //Enemy code
 
+        //Get positioning
+        Vector3 characterPosition = gameObject.transform.position;
+        xCharacter = characterPosition.x;
+        yCharacter = characterPosition.y;
+
+        
+        //Enemy code
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            //Get distance from player to enemy
+            xDistance = (int)enemy.transform.position.x - (int)xCharacter;
+            yDistance = (int)enemy.transform.position.y - (int)yCharacter;
+            int enemyPlayerDistance = math.abs(xDistance) + math.abs(yDistance);
+
+            float enemyFromPlayerX = enemy.transform.position.x - xCharacter;
+            float enemyFromPlayerY = enemy.transform.position.y - yCharacter;
+
+            Debug.Log("enemy from player X: " + enemyFromPlayerX);
+            Debug.Log("enemy from player Y: " + enemyFromPlayerY);
+
+            if (enemyPlayerDistance > 1)
+            {
+                if (math.abs(enemyFromPlayerX) >= math.abs(enemyFromPlayerY))
+                {
+                    if (enemyFromPlayerX > 0)
+                    {
+                        StartCoroutine(MoveEnemy(enemy, Vector2.left));
+                    }
+                    else if (enemyFromPlayerX < 0)
+                    {
+                        StartCoroutine(MoveEnemy(enemy, Vector2.right));
+                    }
+                }
+                else if (math.abs(enemyFromPlayerX) < math.abs(enemyFromPlayerY))
+                {
+                    if (enemyFromPlayerY > 0)
+                    {
+                        StartCoroutine(MoveEnemy(enemy, Vector2.down));
+                    }
+                    else if (enemyFromPlayerY < 0)
+                    {
+                        StartCoroutine(MoveEnemy(enemy, Vector2.up));
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Player attacked");
+                DamagePlayer(1);
+                //Maybe do projectile?
+            }
+        }
 
 
 
@@ -329,6 +344,7 @@ public class GridMovement : MonoBehaviour
         }
     }
 
+    //Player movement
     private IEnumerator Move(Vector2 direction)
     {
         //Set that player is moving
@@ -357,6 +373,26 @@ public class GridMovement : MonoBehaviour
 
         //After movement is done set that player is no longer moving
         isMoving = false;
+    }
+
+    //Enemy movement
+    private IEnumerator MoveEnemy(GameObject enemy, Vector2 direction)
+    {
+        Vector2 startPosition = enemy.transform.position;
+        Vector2 endPosition = startPosition + (direction * gridSize);
+        float enemyMoveDuration = 0.5f;
+
+        float elapsedTime = 0;
+
+        while (elapsedTime < enemyMoveDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float percent = elapsedTime / enemyMoveDuration;
+            enemy.transform.position = Vector2.Lerp(startPosition, endPosition, percent);
+            yield return null;
+        }
+
+        enemy.transform.position = endPosition;
     }
 
 
