@@ -53,17 +53,10 @@ public class GridMovement : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            nextTurn();
+            StartCoroutine(nextTurn());
         }
 
-
-
-        /*if (Input.GetKeyDown(KeyCode.E))
-        {
-            SpawnEnemyFromGrid();
-        }*/
-
-        //Check to see if all enemies are killed
+        //Check to see if player killed all enemies
         if (GameObject.FindGameObjectsWithTag("Enemy").Length < 1)
         {
             Debug.Log("Round complete");
@@ -84,6 +77,11 @@ public class GridMovement : MonoBehaviour
 
         }
 
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            SpawnEnemyFromGrid();
+        }
+        
 
 
         if (Input.GetMouseButtonDown(0))
@@ -188,6 +186,8 @@ public class GridMovement : MonoBehaviour
         
     }
 
+
+
     public void SpawnEnemyFromGrid()
     {
         if (enemyScript != null)
@@ -237,7 +237,7 @@ public class GridMovement : MonoBehaviour
 
     }
 
-    private void nextTurn()
+    private IEnumerator nextTurn()
     {
         //Advance turn counter
         turnNum++;
@@ -250,58 +250,15 @@ public class GridMovement : MonoBehaviour
         
         //Enemy code
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies)
-        {
-            //Get distance from player to enemy
-            xDistance = (int)enemy.transform.position.x - (int)xCharacter;
-            yDistance = (int)enemy.transform.position.y - (int)yCharacter;
-            int enemyPlayerDistance = math.abs(xDistance) + math.abs(yDistance);
-
-            float enemyFromPlayerX = enemy.transform.position.x - xCharacter;
-            float enemyFromPlayerY = enemy.transform.position.y - yCharacter;
-
-            Debug.Log("enemy from player X: " + enemyFromPlayerX);
-            Debug.Log("enemy from player Y: " + enemyFromPlayerY);
-
-            if (enemyPlayerDistance > 1)
-            {
-                if (math.abs(enemyFromPlayerX) >= math.abs(enemyFromPlayerY))
-                {
-                    if (enemyFromPlayerX > 0)
-                    {
-                        StartCoroutine(MoveEnemy(enemy, Vector2.left));
-                    }
-                    else if (enemyFromPlayerX < 0)
-                    {
-                        StartCoroutine(MoveEnemy(enemy, Vector2.right));
-                    }
-                }
-                else if (math.abs(enemyFromPlayerX) < math.abs(enemyFromPlayerY))
-                {
-                    if (enemyFromPlayerY > 0)
-                    {
-                        StartCoroutine(MoveEnemy(enemy, Vector2.down));
-                    }
-                    else if (enemyFromPlayerY < 0)
-                    {
-                        StartCoroutine(MoveEnemy(enemy, Vector2.up));
-                    }
-                }
-            }
-            else
-            {
-                Debug.Log("Player attacked");
-                DamagePlayer(1);
-                //Maybe do projectile?
-            }
-        }
-
+        yield return StartCoroutine(MoveEnemiesSequentially(enemies));
 
 
         //Reset Player movement
         maxMovement = maxMovementOrig;
         //Debug.Log("max Movement: " + maxMovement);
     }
+
+
 
     private IEnumerator HandleMovement()
     {
@@ -376,6 +333,143 @@ public class GridMovement : MonoBehaviour
     }
 
     //Enemy movement
+
+    private IEnumerator MoveEnemiesSequentially(GameObject[] enemies)
+    {
+        Debug.Log("move enemies sequentially");
+        
+        foreach (GameObject enemy in enemies)
+        {
+            //declare vars for unavailable positions
+            Vector2 direction = Vector2.zero;
+            bool upUnavailable = false;
+            bool leftUnavailable = false;
+            bool rightUnavailable = false;
+            bool downUnavailable = false;
+            bool moved = false;
+
+            // Check current positions of all enemies
+            GameObject[] existingEnemies = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (GameObject allEnemy in enemies)
+            {
+                if (((enemy.transform.position.x - allEnemy.transform.position.x) == 1) && (enemy.transform.position.y == allEnemy.transform.position.y))
+                {
+                    //Other enemy on left
+                    leftUnavailable = true;
+                    Debug.Log("left unavailable");
+                }
+                if (((enemy.transform.position.x - allEnemy.transform.position.x) == -1) && (enemy.transform.position.y == allEnemy.transform.position.y))
+                {
+                    //Other enemy on right
+                    rightUnavailable = true;
+                    Debug.Log("right unavailable");
+                }
+                if (((enemy.transform.position.y - allEnemy.transform.position.y) == 1) && (enemy.transform.position.x == allEnemy.transform.position.x))
+                {
+                    //Other enemy below
+                    downUnavailable = true;
+                    Debug.Log("below unavailable");
+                }
+                if (((enemy.transform.position.y - allEnemy.transform.position.y) == -1) && (enemy.transform.position.x == allEnemy.transform.position.x))
+                {
+                    //Other enemy above
+                    upUnavailable = true;
+                    Debug.Log("up unavailable");
+                }
+            }
+
+            //Get distance from player to enemy
+            xDistance = (int)enemy.transform.position.x - (int)xCharacter;
+            yDistance = (int)enemy.transform.position.y - (int)yCharacter;
+            int enemyPlayerDistance = math.abs(xDistance) + math.abs(yDistance);
+
+            float enemyFromPlayerX = enemy.transform.position.x - xCharacter;
+            float enemyFromPlayerY = enemy.transform.position.y - yCharacter;
+
+            //Debug.Log("enemy from player X: " + enemyFromPlayerX);
+            //Debug.Log("enemy from player Y: " + enemyFromPlayerY);
+            
+
+            if (enemyPlayerDistance > 1)
+            {
+                if (math.abs(enemyFromPlayerX) >= math.abs(enemyFromPlayerY))
+                {
+                    if (enemyFromPlayerX > 0 &! leftUnavailable)
+                    {
+                        //Go Left
+                        direction = Vector2.left;
+                        moved = true;
+                    }
+                    else if (enemyFromPlayerX < 0 &! rightUnavailable)
+                    {
+                        //Go Right
+                        direction = Vector2.right;
+                        moved = true;
+                    }
+                }
+                if (math.abs(enemyFromPlayerX) < math.abs(enemyFromPlayerY) &! moved)
+                {
+                    if (enemyFromPlayerY > 0 &! downUnavailable)
+                    {
+                        //Go Down
+                        direction = Vector2.down;
+                        moved = true;
+                    }
+                    else if (enemyFromPlayerY < 0 &! upUnavailable)
+                    {
+                        //Go Up
+                        direction = Vector2.up;
+                        moved = true;
+                    }
+                }
+                //yield return StartCoroutine(MoveEnemy(enemy, direction));
+                if (!moved)
+                {
+                    Debug.Log("enemy cant move normally");
+                    if(upUnavailable || downUnavailable)
+                    {
+                        if(!rightUnavailable)
+                        {
+                            direction = Vector2.right;
+                        }
+                        else if(!leftUnavailable)
+                        {
+                            direction = Vector2.left;
+                        }
+                        else
+                        {
+                            Debug.Log("Enemy cant move at all");
+                        }
+                    }
+                    else if(rightUnavailable || leftUnavailable)
+                    {
+                        if (!downUnavailable)
+                        {
+                            direction = Vector2.down;
+                        }
+                        else if (!upUnavailable)
+                        {
+                            direction = Vector2.up;
+                        }
+                        else
+                        {
+                            Debug.Log("Enemy cant move at all");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Player attacked");
+                DamagePlayer(1);
+                //Maybe do projectile?
+            }
+
+            // Start moving the enemy and wait until the move is complete
+            yield return StartCoroutine(MoveEnemy(enemy, direction));
+        }
+    }
+
     private IEnumerator MoveEnemy(GameObject enemy, Vector2 direction)
     {
         Vector2 startPosition = enemy.transform.position;
@@ -403,9 +497,6 @@ public class GridMovement : MonoBehaviour
         float distance = Vector3.Distance(transform.position, enemy.transform.position);
         return distance <= 1.0;
     }
-
-    
-
 
 }
 
