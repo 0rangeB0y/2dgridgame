@@ -43,7 +43,7 @@ public class GridMovement : MonoBehaviour
     private void Start()
     {
         maxMovement = maxMovementOrig;
-        SpawnEnemyFromGrid();
+        //SpawnEnemyFromGrid();
     }
 
 
@@ -77,10 +77,10 @@ public class GridMovement : MonoBehaviour
 
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
+        /*if(Input.GetKeyDown(KeyCode.E))
         {
             SpawnEnemyFromGrid();
-        }
+        }*/
         
 
 
