@@ -77,8 +77,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 0.9019608, g: 0.1254902, b: 0.1254902, a: 1}
+  m_Sprite: {fileID: 5398807837072792716, guid: 5d4daff38e3d9174b873918abcf2c1d4, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -100,7 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a81f78ba377c24a834c1649c2846b0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isRepeatedMovement: 0
   moveDuration: 0.1
   gridSize: 1
   maxMovementOrig: 5
@@ -109,6 +108,7 @@ MonoBehaviour:
   maxMovement: 0
   currHealth: 10
   turnNum: 1
+  roundNum: 1
 --- !u!114 &-7604320282638575790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,7 +122,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 8364302723959187188}
-  enemyHealth: 5
 --- !u!58 &-5722160413156062356
 CircleCollider2D:
   m_ObjectHideFlags: 0
