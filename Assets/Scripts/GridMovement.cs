@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
+using UnityEngine.SceneManagement;
 
 public class GridMovement : MonoBehaviour
 {
@@ -67,12 +67,16 @@ public class GridMovement : MonoBehaviour
             turnNum = 0;
             enemiesToSpawn++;
             maxMovement = maxMovementOrig;
-            if (roundNum < 30)
+            if (roundNum < 11)
             {
                 for (int i = 0; i < enemiesToSpawn; i++)
                 {
                     SpawnEnemyFromGrid();
                 }
+            }
+            else
+            {
+                SceneManager.LoadScene("Game Win");
             }
 
         }
@@ -220,7 +224,12 @@ public class GridMovement : MonoBehaviour
         if (currHealth <= 0)
         {
             Debug.Log("You lose");
+            SceneManager.LoadScene("Game Loss");
         }
+
+
+
+
 
     }
 
